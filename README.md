@@ -1,4 +1,4 @@
-# PanelSegmentationTool
+# PanelSegmentationTool (PST)
 A tool using classical computer vision for segmentation of digital images composing of multiple panels. Especially effective on Comic panels, Collages and Memes.
 
 Brief Methodology
