@@ -354,7 +354,7 @@ for image_i in range(N):
                 if verticalcuts(horizontal_c_pos[i], horizontal_c_pos[i+1], vertical_c_lines) != False:
                     cutting_points = verticalcuts(horizontal_c_pos[i], horizontal_c_pos[i+1], vertical_c_lines)
                     cutting_points.insert(0, 0)
-                    cutting_points += [im_height-1]
+                    cutting_points += [im_width-1]
                     #print(cutting_points, horizontal_c_pos[i], horizontal_c_pos[i+1])
                     for j in range(len(cutting_points)-1):
                         # print("hhvv", horizontal_c_pos[i],horizontal_c_pos[i+1],cutting_points[j],cutting_points[j+1])
