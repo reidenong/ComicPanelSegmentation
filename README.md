@@ -19,10 +19,10 @@ optional arguments:
     --help
     show this help message and exit
     
-    --filepath
+    --filepath your/filepath/here
     directories where images are received as input, default is set as 'Data/'
     
-    --outputfilepath
+    --outputfilepath your/filepath/here
     directories where images are saved, default is set as 'Output/'
     
     --nosaveimage
