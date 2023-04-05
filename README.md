@@ -13,6 +13,7 @@ usage: PST.py
        [--filepath FILEPATH]
        [--outputfilepath OUTPUTFILEPATH]
        [--nosaveimage]
+       [--bboxjson]
        [--pdf]
        
 optional arguments:
@@ -27,6 +28,9 @@ optional arguments:
     
     --nosaveimage
     choose not to save images
+    
+    --bbox json
+    choose to save image segmentation bounding boxes, with the same filename in JSON
     
     --pdf
     generates a pdf useful for troubleshooting
