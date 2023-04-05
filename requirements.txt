@@ -6,4 +6,4 @@ Pillow==9.4.0
 scikit_image==0.19.3
 scipy==1.10.1
 skimage==0.0
-alive-progress
+tqdm
