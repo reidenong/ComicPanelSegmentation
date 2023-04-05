@@ -1,5 +1,7 @@
 # PanelSegmentationTool (PST)
-A tool using classical computer vision for segmentation of digital images composing of multiple panels. Especially effective on Comic panels, Collages and Memes. Segmentation on complex image collage formats helps to improves performance of downstream tasks such as OCR, Object detection and other computer vision tools in an image processing pipieline.
+A tool using classical computer vision for segmentation of digital images composing of multiple panels. Especially effective on Comic panels, Collages and Memes. Segmentation on complex image collage formats helps to improves performance of downstream tasks such as OCR, Object detection and other computer vision tools in an image processing pipeline.
+
+Made in Python 3.
 
 ### Installing Dependencies
 ```$ pip install -r requirements.txt```
