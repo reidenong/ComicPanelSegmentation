@@ -6,8 +6,10 @@ import os
 import shutil
 import numpy as np
 import math
+import json
 import imageio
 import cv2
+from tqdm import tqdm
 from PIL import Image
 from scipy import ndimage as ndi
 from skimage.feature import canny
@@ -26,6 +28,7 @@ import argparse
 parser = argparse.ArgumentParser()
 parser.add_argument("--filepath", default="Data/", help="directories where images are received as input, default is set as 'Data/'.")
 parser.add_argument("--outputfilepath", default="Output/", help="directories where images are saved(or overwrites) as output, default is set as 'Output/'.")
+parser.add_argument("--bboxjson", action="store_true", help="Choose not to save images, best used with --pdf to reduce unecessary processing")
 parser.add_argument("--nosaveimage", action="store_false", help="Choose not to save images, best used with --pdf to reduce unecessary processing")
 parser.add_argument("--pdf", action="store_true", help="Choose to generate a pdf displaying program decision making. Useful for troubleshooting.")
 args = parser.parse_args()
@@ -138,6 +141,7 @@ def verticalcuts(lb, ub, vlist):
 images = []                     # list of images
 segment_lines = []              # list of segment lines per image
 cutting_lines = []              # list of lines which image is cut by
+bbox_dict = {}
 filepath = args.filepath     # filepath containing dataset
 output_filepath = args.outputfilepath  # filepath where cut images will be output
 filenames = os.listdir(filepath)
@@ -146,6 +150,7 @@ N = len(filenames)
 pdf_images = args.pdf
 show_images = True
 save_images = args.nosaveimage
+save_bboxjson = args.bboxjson
 
 # Static parameters
 hough_threshold = 70            # in ???, empirically determined
@@ -177,7 +182,7 @@ if save_images:
     os.makedirs(output_filepath)
 
 # Main
-for image_i in range(N):
+for image_i in tqdm(range(N)):
 
     # Receiving Image input
     image_filepath = filepath + filenames[image_i]
@@ -344,6 +349,34 @@ for image_i in range(N):
     # Cutting Images into output
     #===========================================================================
     output_dir = output_filepath  + filenames[image_i][:-4]
+    
+    if save_bboxjson:
+        order_ctr = 0
+        # Cutting Horizontal Sections
+        for i in range(len(horizontal_c_pos)-2):       # CHECK FOR HEAVY BUGS
+            img_h_section = im[horizontal_c_pos[i]:horizontal_c_pos[i+1],:]
+            try:
+                if verticalcuts(horizontal_c_pos[i], horizontal_c_pos[i+1], vertical_c_lines) != False:
+                    cutting_points = verticalcuts(horizontal_c_pos[i], horizontal_c_pos[i+1], vertical_c_lines)
+                    cutting_points.insert(0, 0)
+                    cutting_points += [im_height-1]
+                    #print(cutting_points, horizontal_c_pos[i], horizontal_c_pos[i+1])
+                    for j in range(len(cutting_points)-1):
+                        # print("hhvv", horizontal_c_pos[i],horizontal_c_pos[i+1],cutting_points[j],cutting_points[j+1])
+                        img_v_section = im[horizontal_c_pos[i]:horizontal_c_pos[i+1],cutting_points[j]:cutting_points[j+1]]
+                        bbox_dict[filenames[image_i][:-4] + "_" +  str(order_ctr)] = [horizontal_c_pos[i], horizontal_c_pos[i+1],cutting_points[j], cutting_points[j+1]]
+                        #print("saved", filenames[image_i][:-4] + "_" + str(order_ctr) )
+                        #cv2.imwrite(output_dir + "/" + str(order_ctr)+".jpg", cv2.cvtColor(img_v_section, cv2.COLOR_RGB2BGR))
+                        order_ctr += 1
+                else:
+                    plt.imshow(img_h_section) # ???
+                    #print("saved", filenames[image_i][:-4] + "_" + str(order_ctr) )
+                    bbox_dict[filenames[image_i][:-4] + "_" + str(order_ctr)] = [horizontal_c_pos[i], horizontal_c_pos[i+1],1, im_width-1]
+                    #cv2.imwrite(output_dir + "/" + str(order_ctr)+".jpg", cv2.cvtColor(img_h_section, cv2.COLOR_RGB2BGR))
+                    order_ctr += 1
+            except ValueError:
+                pass
+    
     if save_images:
         os.makedirs(output_dir)
         order_ctr = 0
@@ -354,7 +387,7 @@ for image_i in range(N):
                 if verticalcuts(horizontal_c_pos[i], horizontal_c_pos[i+1], vertical_c_lines) != False:
                     cutting_points = verticalcuts(horizontal_c_pos[i], horizontal_c_pos[i+1], vertical_c_lines)
                     cutting_points.insert(0, 0)
-                    cutting_points += [im_width-1]
+                    cutting_points += [im_height-1]
                     #print(cutting_points, horizontal_c_pos[i], horizontal_c_pos[i+1])
                     for j in range(len(cutting_points)-1):
                         # print("hhvv", horizontal_c_pos[i],horizontal_c_pos[i+1],cutting_points[j],cutting_points[j+1])
@@ -372,6 +405,12 @@ for image_i in range(N):
 
 # Outprocessing
 # Show plots
+
+if save_bboxjson:
+    print("Saving BBox json")
+    with open("BBox.json", "w") as fp:
+        json.dump(bbox_dict, fp)
+
 if show_images:
     for a in ax:
         a.set_axis_off()
