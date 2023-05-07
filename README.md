@@ -21,7 +21,7 @@ Segmentation on complex image collage formats helps to improves performance of d
 <br />
 
 ### About the comic Panel Segmentation Tool
-While many image segmentation tools these days take a [deep learning approach](https://github.com/facebookresearch/segment-anything), PST chooses to rely on classical computer vision. This is possible due to the relatively small problem space of comics and digitally created image formats; coupled with exploiting some recurring tendencies such as pixel perfect panel delineations, this allows for accurate segmentation to be done with some clever heuristics.
+While many image segmentation tools these days take a [deep learning approach](https://github.com/facebookresearch/segment-anything), PST chooses to rely on classical computer vision. This is possible due to the relatively small problem space of comics and digitally created image formats; coupled with exploiting some digital formatting trends such as pixel perfect panel delineations, this allows for accurate segmentation to be done with some clever heuristics.
 
 <br />
 
