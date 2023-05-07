@@ -14,7 +14,8 @@ Segmentation on complex image collage formats helps to improves performance of d
 
 ## Examples of PST with other internet images
 
-![image](https://user-images.githubusercontent.com/65756407/236691462-d1d27f11-a28b-4cec-976c-0d31f1538894.png)
+![image](https://user-images.githubusercontent.com/65756407/236692909-adcd233c-8c18-4566-b652-56b0e331375c.png)
+
 
 
 <br />
